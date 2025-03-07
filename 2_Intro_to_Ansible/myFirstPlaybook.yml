@@ -1,0 +1,41 @@
+---
+
+# This playbook
+# Updates APT
+# Installs Nginx
+# Moves over a template file
+# Restarts the service - checks its started 
+# Exposes it over the internet
+- name: My first playbook
+  hosts: test_group
+  become: true
+  tasks:
+    - name: Update apt
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+    # - name: Install Nginx
+    #   ansible.builtin.apt:
+    #     name: nginx
+    #     state: present
+    # - name: Copy over the template
+    #   template:
+    #     src: /home/ansible/index.html.j2
+    #     dest: /var/www/html/index.html
+    # - name: Restart Nginx
+    #   service:
+    #     name: nginx
+    #     state: restarted
+    # - name: Check Nginx is running
+    #   uri:
+    #     url: http://localhost
+    #     status_code: 200
+    # - name: Expose Nginx over the internet
+    #   azure_rm_publicipaddress:
+    #     resource_group: myResourceGroup
+    #     allocation_method: Static
+    #     name: myPublicIP
+    #   register: output_ip_address
+    # - name: Public IP of VM
+    #   debug:
+    #     msg: "The public IP is {{ output_ip_address.state.ip_address }}."
