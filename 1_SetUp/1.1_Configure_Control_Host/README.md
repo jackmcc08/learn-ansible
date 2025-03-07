@@ -80,7 +80,7 @@ Depending on what you are trying to do, you can extend Ansible through additiona
 
 **Roles and Collections**
 - Roles and collections can generally be installed through ansible-galaxy. 
-- [Ansible User Guide](https://docs.ansible.com/ansible/latest/galaxy/user_guide.html)
+- [Ansible User Guide](https://docs.ansible.com/ansible/latest/galaxy/user_guide.html){:target="_blank"} 
 
 > NOTE: most roles are definied as part of a collection, but you can install individual roles as well.
 ```bash
