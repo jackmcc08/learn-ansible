@@ -4,9 +4,11 @@
     name: learnAnsibleRG
   tasks:
     - name: Deleting resource group - "{{ name }}"
-      azure_rm_resourcegroup:
+      azure.azcollection.azure_rm_resourcegroup:
         name: "{{ name }}"
         state: absent
+        force_delete_nonempty: true
       register: rg
-    - debug:
+    - name: Print Resource Group Deletion Output
+      ansible.builtin.debug:
         var: rg
