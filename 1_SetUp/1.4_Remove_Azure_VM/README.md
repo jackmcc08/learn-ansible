@@ -13,13 +13,13 @@ The Ansible Code will be run on your managed node and you will need a personal A
 
 ### <u>Tutorial</u>
 
-1. Create the playbook delete_rg.yml
+#### __1. :rocket: Create the playbook delete_rg.yml__
 - Update the details in [delete_rg.yml](./delete_rg.yml)
 
 > NOTE: you can also override defined variables in the command line. 
     - See guide on variable precedence [Link](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html#understanding-variable-precedence)
 
-2. Run the playbook
+#### __2. :rocket: Run the playbook__
 
 ```bash
 # If you want to use extra vars include the --extra-vars command

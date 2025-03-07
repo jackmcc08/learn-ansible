@@ -8,7 +8,7 @@
 
 ### <u>Tutorial</u>
 
-#### __Step 1 - Configure passwordless SSH:__
+#### :rocket: __Step 1 - Configure passwordless SSH:__
 
 1. Create an SSH Key on your Control Host
 > NOTE if you set up the VM using Lesson 1.3 you will not need to set up a new SSH key.
@@ -26,16 +26,10 @@ ssh-keygen -m PEM -t rsa -b 4096
 
 5. Check SSH works
 
-#### __Step 2 - Install dependencies:___
+#### :rocket: __Step 2 - Install dependencies:___
 For ansible modules that run Ansible generate Python code, the target host needs to be able to run python. This will be detailed in the module documentation
 
 Install Python (if not already installed):
 ```bash 
 sudo apt install python3 -y
 ```
-
-***
-### <u>Set up an Azure Linux VM using Ansible</u>
-
-The below instructions are taken from this guide and simplified for the purpose of this tutorial 
-- [Microsoft Guide](https://learn.microsoft.com/en-us/azure/developer/ansible/vm-configure?tabs=ansible)

@@ -4,7 +4,7 @@
 
 ### <u>Quick-Start</u>
 - Assuming you have a linux machine, you can run the script in this folder to set up python and ansible-core. 
-- [bash script](./quickstart.sh)
+    - Quickstart Script: [bash script](./quickstart.sh)
 ***
 
 ### <u>Tutorial</u>
@@ -16,7 +16,7 @@
 - The control host must be able to connect to the target hosts
 
 
-#### __Step 1 - Create a Linux Machine:__
+#### :rocket: __Step 1 - Create a Linux Machine:__
 There are multiple ways to create a linux machine, including: 
 - Create a VM in a cloud environment [guide](https://learn.microsoft.com/en-us/azure/developer/ansible/install-on-linux-vm?tabs=azure-cli#create-a-virtual-machine)
 - Use WSL on a windows machine [guide](https://learn.microsoft.com/en-us/windows/wsl/setup/environment)
@@ -27,7 +27,7 @@ This tutorial will not cover how to create a linux machine, but the provided lin
 The following commands assume you are using: 
 - Ubuntu 22.04 or 24.04
 
-#### __Step 2 - Install Python Dependencies:__
+#### :rocket: __Step 2 - Install Python Dependencies:__
 
 Install python3 and pip
 
@@ -49,7 +49,7 @@ sudo apt install python3 -y
 sudo apt install -y python3-pip
 ```
 
-#### __Step 3 - Install Ansible (ansible-core):__
+#### :rocket: __Step 3 - Install Ansible (ansible-core):__
 
 Ansible can be installed as either `ansible` or `ansible-core`. 
 
@@ -74,7 +74,7 @@ pipx install ansible-core --upgrade
 ***
 
 
-### __Extending Ansible and Installing Dependencies__
+### :bulb: __INFO Section: Extending Ansible and Installing Dependencies__
 
 Depending on what you are trying to do, you can extend Ansible through additional roles and collections. 
 

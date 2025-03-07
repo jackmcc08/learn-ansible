@@ -9,6 +9,7 @@ The Ansible Code will be run on your managed node and you will need a personal A
 > This tutorial is based on this [Microsoft Guide](https://learn.microsoft.com/en-us/azure/developer/ansible/vm-configure?tabs=ansible)
 
 ### <u>Dependencies</u>
+- You will need a personal Azure Subscription [guide](https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account?msockid=2e4db245fd3360862ed4a7edfc88611d) 
 - You will need a service principle for your Azure Subscription. See the tutorials here: 
     - [Create a Service Principle](https://learn.microsoft.com/en-us/azure/developer/ansible/create-ansible-service-principal?tabs=azure-cli)
         - Follow the full tutorial
@@ -19,17 +20,17 @@ The Ansible Code will be run on your managed node and you will need a personal A
 
 ### <u>Tutorial</u>
 
-1. Create an SSH Key Pair on your control node
+#### __1. :rocket: Create an SSH Key Pair on your control node__
 ```bash
 ssh-keygen -m PEM -t rsa -b 4096
 ```
 
-2. Create and Update the playbook with your desired configuration 
+#### __2. :rocket: Create and Update the playbook with your desired configuration__ 
 - Enter your preferred details into the playbook
 - copy the public key value into the `<key_data>` placeholder
 > NOTE: the key data is sensitive and should not be committed into a repo!
 
-3. Run the playbook
+#### __3. :rocket: Run the playbook__
 > NOTE: there is no inventory file because the commands all run on the localhost (the control node)
 
 ```bash
@@ -43,7 +44,7 @@ ansible-playbook build_azure_vm.yml
 
 ```
 
-4. Verify the VM exists
+#### __4. :rocket: Verify the VM exists__
 - Requires Azure Command Line installed
 - put in the vm name of the one you created
 ```bash
@@ -51,7 +52,7 @@ VM_NAME=myVM
 az vm list -d -o table --query "[?name=='$VM_NAME']"
 ```
 
-5. Test connection
+#### __5. :rocket: Test connection__
 ```bash
 ssh azureuser@<ip_address> -i /home/azureuser/.ssh/authorized_keys/id_rsa
 ```
