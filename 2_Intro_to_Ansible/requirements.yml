@@ -1,6 +1,0 @@
----
-
-collections:
-# from galaxy
-- name: community.general
-  version: ">=9.1.0"

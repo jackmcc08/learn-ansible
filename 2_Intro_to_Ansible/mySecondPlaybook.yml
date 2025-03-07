@@ -1,0 +1,36 @@
+---
+
+- name: My second playbook
+  hosts: alternative_group
+  gather_facts: true
+  tasks:
+    - name: Copy over the template
+      ansible.builtin.template:
+        src: ./index.html.j2
+        dest: /var/www/html/index.nginx-debian.html
+      become: true
+      vars:
+        my_name: "Jack"
+    - name: Restart Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+      become: true
+    - name: Print number of processor cores
+      ansible.builtin.debug:
+        var: ansible_processor_cores
+    - name: Print number of processor cores
+      ansible.builtin.debug:
+        var: ansible_facts['processor_cores']
+    - name: Print hostname
+      ansible.builtin.debug:
+        msg: "This computer is called: {{ inventory_hostname }}"
+    - name: Visit the NGINX homepage
+      ansible.builtin.uri:
+        url: http://localhost
+        status_code: 200
+        return_content: true
+      register: output
+    - name: Print the output of the homepage
+      ansible.builtin.debug:
+        var: output
