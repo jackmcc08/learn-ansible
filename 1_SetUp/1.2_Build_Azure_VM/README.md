@@ -1,10 +1,10 @@
-## 1.3 Build Azure VM
+## 1.2 Build Azure VM
 
 This is an example tutorial using Azure and Ansible to create a VM as target machine for the purpose of the tutorial. 
 
 The Ansible Code will be run on your managed node and you will need a personal Azure Subscription with some credit in it. 
 
-> NOTE: destroy the VM using lesson 1.4 as soon as possible to avoid incurring additional cost
+> NOTE: destroy the VM using lesson [1.4](../1.4_Remove_Azure_VM/) as soon as possible to avoid incurring additional cost
 
 > This tutorial is based on this [Microsoft Guide](https://learn.microsoft.com/en-us/azure/developer/ansible/vm-configure?tabs=ansible)
 

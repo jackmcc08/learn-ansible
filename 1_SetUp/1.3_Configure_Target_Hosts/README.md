@@ -1,8 +1,8 @@
-## 1.2 Configure Target Host 
+## 1.3 Configure Target Host 
 
 ### <u>Dependencies</u>
 - This tutorial assumes you already have a target machine (whether a VM or Physical Machine)
-- Follow lesson [1.3](../1.3_Build_Azure_VM/) to create an Azure VM using Ansible
+- Follow lesson [1.2](../1.2_Build_Azure_VM/) to create an Azure VM using Ansible
 
 ***
 

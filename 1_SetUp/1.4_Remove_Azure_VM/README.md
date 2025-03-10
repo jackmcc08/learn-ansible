@@ -1,13 +1,13 @@
 ## 1.4 Remove Azure VM
 
-This is an example tutorial using Azure and Ansible to create a VM as target machine for the purpose of the tutorial. This tutorial is to remove the VM created in lesson [1.3](../1.3_Build_Azure_VM/README.md)
+This is an example tutorial using Azure and Ansible to create a VM as target machine for the purpose of the tutorial. This tutorial is to remove the VM created in lesson [1.2](../1.2_Build_Azure_VM/README.md)
 
 The Ansible Code will be run on your managed node and you will need a personal Azure Subscription with some credit in it. 
 
 > This tutorial is based on this [Microsoft Guide](https://learn.microsoft.com/en-us/azure/developer/ansible/vm-configure?tabs=ansible)
 
 ### <u>Dependencies</u>
-- You will need a service principle for your Azure Subscription. See lesson 1.3 and follow the guidance there.
+- You will need a service principle for your Azure Subscription. See lesson [1.2](../1.2_Build_Azure_VM/) and follow the guidance there.
 
 ***
 
