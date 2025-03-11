@@ -91,8 +91,15 @@ This will involve copying over an updated index page and restarting the service.
 touch ~/intro-to-ansible/mySecondPlaybook.yml
 nano ~/intro-to-ansible/mySecondPlaybook.yml 
 ```
-
 - Populate the playbook file with the yaml from the [example](./mySecondPlaybook.yml)
+
+- create the template in your directory
+> NOTE: the template needs to be in the same directory as your playbook. Or you need to alter the referencing in the playbook. 
+```bash
+touch ~/intro-to-ansible/index.html.j2
+nano ~/intro-to-ansible/index.html.j2
+```
+- Populate the playbook file with the yaml from the [example](./index.html.j2)
 
 - Run the playbook 
 ```bash
