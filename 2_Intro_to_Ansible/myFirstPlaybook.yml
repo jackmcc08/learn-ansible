@@ -2,7 +2,7 @@
 
 - name: My first playbook
   hosts: test_group
-  become: false
+  become: true
   gather_facts: true
   tasks:
     - name: Update apt
