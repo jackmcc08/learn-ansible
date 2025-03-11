@@ -12,7 +12,7 @@
 - This guide is based on this tutorial [DigitalOcean SSH key guide](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server)
 
 1. Create an SSH Key on your Control Host
-> NOTE if you set up the VM using Lesson 1.3 you will not need to set up a new SSH key.
+> NOTE if you set up the VM using Lesson [1.2](../1.2_Build_Azure_VM/) you will not need to set up a new SSH key.
 
 ```bash
 ssh-keygen -m PEM -t rsa -b 4096

@@ -101,6 +101,10 @@ ansible-galaxy install geerlingguy.apache
 - e.g. [Azure Collection](https://github.com/ansible-collections/azure?tab=readme-ov-file#requirements)
 
 ```bash
+# With pip
+sudo pip3 install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt
+
+# With pipx
 pipx runpip ansible install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt
 ```
 
