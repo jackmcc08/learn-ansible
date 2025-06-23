@@ -1,0 +1,6 @@
+---
+
+- name: This is the reused task - type {{ type_reuse }}
+  ansible.builtin.debug:
+    msg: 
+    - "This is the passed down variable: {{ test_var }}"

@@ -1,0 +1,172 @@
+---
+# This playbook uses the Azure ansible modules to create a VM in Azure.
+# You need to have the service principle details as per the dependencies in the tutorial
+
+- name: Create Multiple Azure VMs
+  hosts: localhost
+  connection: local
+  vars:
+    resource_group_name: learnAnsibleRG
+    location: uksouth
+    vnet_name: myVnet
+    subnet_name: mySubnet
+    nsg_name: myNetworkSecurityGroup
+    vm_username: adminuser
+    key_data: "PUBLIC_KEY_DATA"
+    vm_one:
+      public_ip_name: myPublicIP-1
+      nic_name: myNIC-1
+      vm_name: myVM-1
+      vm_size: Standard_DS1_v2
+    vm_two:
+      public_ip_name: myPublicIP-2
+      nic_name: myNIC-2
+      vm_name: myVM-2
+      vm_size: Standard_DS1_v2
+
+  tasks:
+  - name: Create resource group
+    azure.azcollection.azure_rm_resourcegroup:
+      name: "{{ resource_group_name }}"
+      location: "{{ location }}"
+
+  - name: Create virtual network
+    azure.azcollection.azure_rm_virtualnetwork:
+      resource_group: "{{ resource_group_name }}"
+      name: "{{ vnet_name }}"
+      address_prefixes: "10.0.0.0/16"
+
+  - name: Add subnet
+    azure.azcollection.azure_rm_subnet:
+      resource_group: "{{ resource_group_name }}"
+      name: "{{ subnet_name }}"
+      address_prefix: "10.0.1.0/24"
+      virtual_network: "{{ vnet_name }}"
+
+  - name: Create Network Security Group that allows SSH and HTTP
+    azure.azcollection.azure_rm_securitygroup:
+      resource_group: "{{ resource_group_name }}"
+      name: "{{ nsg_name }}"
+      rules:
+        - name: SSH
+          protocol: Tcp
+          destination_port_range: 22
+          access: Allow
+          priority: 1001
+          direction: Inbound
+        - name: HTTP
+          protocol: Tcp
+          destination_port_range: 80
+          access: Allow
+          priority: 1002
+          direction: Inbound
+
+# This is created using blocks for ease of copying in a tutorial, 
+# it would be preferable to use a loop and include_task feature of ansible to avoid duplicating the information. 
+  - name: Create VM Block 
+    block:
+    - name: Create public IP address
+      azure.azcollection.azure_rm_publicipaddress:
+        resource_group: "{{ resource_group_name }}"
+        allocation_method: Static
+        name: "{{ vm_one.public_ip_name }}"
+      register: output_ip_address_vm_one
+
+    - name: Public IP of VM
+      ansible.builtin.debug:
+        msg: "The public IP is {{ output_ip_address_vm_one.state.ip_address }}."
+    
+    - name: Create virtual network interface card
+      azure.azcollection.azure_rm_networkinterface:
+        resource_group: "{{ resource_group_name }}"
+        name: "{{ vm_one.nic_name }}"
+        virtual_network: "{{ vnet_name }}"
+        subnet: "{{ subnet_name }}"
+        security_group: "{{ nsg_name }}"
+        ip_configurations:
+        - name: ipconfig1
+          public_ip_address_name: "{{ vm_one.public_ip_name }}"
+          primary: true
+
+    - name: Create VM
+      azure.azcollection.azure_rm_virtualmachine:
+        resource_group: "{{ resource_group_name }}"
+        name: "{{ vm_one.vm_name }}"
+        vm_size: "{{ vm_one.vm_size }}"
+        admin_username: "{{ vm_username }}"
+        ssh_password_enabled: false
+        ssh_public_keys:
+          - path: "/home/{{ vm_username }}/.ssh/authorized_keys"
+            key_data: "{{ key_data }}"
+        network_interfaces: "{{ vm_one.nic_name }}"
+        image:
+          offer: 0001-com-ubuntu-server-jammy
+          publisher: Canonical
+          sku: 22_04-lts
+          version: latest
+
+    - name: Public IP of VM
+      ansible.builtin.debug:
+        msg: "The public IP is {{ output_ip_address_vm_one.state.ip_address }}."
+
+    - name: Set IP of VM
+      ansible.builtin.set_fact:
+        vm_one_public_ip: "{{ output_ip_address_vm_one.state.ip_address }}"
+
+      
+  - name: Create VM Block 
+    block:
+    - name: Create public IP address
+      azure.azcollection.azure_rm_publicipaddress:
+        resource_group: "{{ resource_group_name }}"
+        allocation_method: Static
+        name: "{{ vm_two.public_ip_name }}"
+      register: output_ip_address_vm_two
+
+    - name: Public IP of VM
+      ansible.builtin.debug:
+        msg: "The public IP is {{ output_ip_address_vm_two.state.ip_address }}."
+    
+    - name: Create virtual network interface card
+      azure.azcollection.azure_rm_networkinterface:
+        resource_group: "{{ resource_group_name }}"
+        name: "{{ vm_two.nic_name }}"
+        virtual_network: "{{ vnet_name }}"
+        subnet: "{{ subnet_name }}"
+        security_group: "{{ nsg_name }}"
+        ip_configurations:
+        - name: ipconfig1
+          public_ip_address_name: "{{ vm_two.public_ip_name }}"
+          primary: true
+
+    - name: Create VM
+      azure.azcollection.azure_rm_virtualmachine:
+        resource_group: "{{ resource_group_name }}"
+        name: "{{ vm_two.vm_name }}"
+        vm_size: "{{ vm_two.vm_size }}"
+        admin_username: "{{ vm_username }}"
+        ssh_password_enabled: false
+        ssh_public_keys:
+          - path: "/home/{{ vm_username }}/.ssh/authorized_keys"
+            key_data: "{{ key_data }}"
+        network_interfaces: "{{ vm_two.nic_name }}"
+        image:
+          offer: 0001-com-ubuntu-server-jammy
+          publisher: Canonical
+          sku: 22_04-lts
+          version: latest
+
+    - name: Public IP of VM
+      ansible.builtin.debug:
+        msg: "The public IP is {{ output_ip_address_vm_two.state.ip_address }}."
+
+    - name: Set IP of VM
+      ansible.builtin.set_fact:
+        vm_two_public_ip: "{{ output_ip_address_vm_two.state.ip_address }}"
+
+
+  - name: Print IPs of VMs  
+    ansible.builtin.debug:
+      msg: 
+      - "The public IP of VM One is {{ vm_one_public_ip }}."
+      - "The public IP of VM Two is {{ vm_two_public_ip }}."

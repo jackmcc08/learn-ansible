@@ -1,0 +1,12 @@
+---
+
+test_group:
+  hosts:
+    myVM-1:
+      ansible_host: 51.145.32.173 # <Insert IP Address>
+    myVM-2:
+      ansible_host: 51.140.94.120 # <Insert IP Address>
+  vars:
+    ansible_ssh_private_key_file: ~/.ssh/learn-ansible/id_rsa # ~/.ssh/id_rsa
+    ansible_user: adminuser
+    ansible_python_interpreter: /usr/bin/python3
