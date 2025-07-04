@@ -124,6 +124,8 @@
     # Import the variable file - note here I have used include_vars but there are many ways to import variables from Files
     # Run the playbook with this new task - ansible-playbook -i inventory.yml myThirdPlaybook.yml --ask-vault-pass
     # You can also use a certificate to unlock the vault, or provide the password via a security tool
+    # You can also use a script to unlock the vault, this could be used to store secrets for example in a key-vault, see an example:
+    # ansible-playbook -i inventory.yml --vault-id dev@print-password-client.py myThirdPlaybook.yml 
     - name: Imports variables from the encrypted file
       ansible.builtin.include_vars:
         file: encrypted_secrets.yml
@@ -136,5 +138,7 @@
         - "This variable was encrypted: {{ secret_var }}"
       when: 
         - ansible_hostname == vm_one
+
+    
 
 
