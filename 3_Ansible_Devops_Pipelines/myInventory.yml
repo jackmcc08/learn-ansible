@@ -1,0 +1,10 @@
+---
+
+test_group:
+  hosts:
+    node1:
+      ansible_host: <Insert IP Address of the target VPN> # e.g. 10.0.20.10
+  vars:
+    ansible_ssh_private_key_file: ~/.ssh/id_rsa # this will be replaced in the pipeline
+    ansible_user: adminuser
+    ansible_python_interpreter: /usr/bin/python3
