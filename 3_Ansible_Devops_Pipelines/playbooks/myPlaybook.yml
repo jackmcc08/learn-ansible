@@ -1,0 +1,28 @@
+---
+
+- name: My first playbook
+  hosts: test_group
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Update apt
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+    - name: Install Nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+    - name: Start Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+    - name: Visit the NGINX homepage
+      ansible.builtin.uri:
+        url: http://localhost
+        status_code: 200
+        return_content: true
+      register: output
+    - name: Print the output of the homepage
+      ansible.builtin.debug:
+        var: output

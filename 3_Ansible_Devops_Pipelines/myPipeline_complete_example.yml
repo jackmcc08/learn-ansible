@@ -1,0 +1,107 @@
+---
+
+name: Ansible Playbook Pipeline
+
+# This section controls the triggering of the pipeline, it is set to be manually triggered only
+trigger:
+- none
+
+# This section specifies the self-hosted agent pool to use
+pool:
+  name: Default
+  demands: Agent.Name -equals mySelfHostedAgent
+
+steps:
+- checkout: self
+  displayName: 'Checkout source code'
+
+# This sets up the Ansible dependencies for each run of the pipeline
+- task: Bash@3
+  displayName: 'Install Ansible Dependencies'
+  inputs:
+    targetType: 'inline'
+    script: |
+      set -e
+
+      echo "Setting up Ansible"
+
+      sudo apt update
+      sudo apt install python3 -y
+
+      sudo apt install -y \
+      python3-pip \
+      python3-venv
+
+      echo -e "\nCreating python virtual environment - ansible-env"
+      python3 -m venv ansible-env
+
+      echo -e "\nActivating venv - ansible-env"
+      source ansible-env/bin/activate
+
+      echo -e "\nInstalling ansible-core"
+      pip install ansible-core --upgrade
+
+      echo -e "\nExporting PATH to include local bin"
+      export PATH=~/.local/bin:$PATH
+      
+      echo -e "\nAnsible Version"
+      ansible --version
+
+      # The below code will install collections and python requirements defined in file, for this tutorial we do not use them, but they are there for reference.
+      if [ -s "./ansible-requirements.yml" ]; then
+        echo "Installing Ansible Galaxy requirements from ansible-requirements.yml"
+        ansible-galaxy install -r ./ansible-requirements.yml
+      fi
+
+      if [ -s "./python-requirements.txt" ]; then
+        echo -e "\nInstalling Python requirements"
+        pip install -r ./python-requirements.txt
+      fi
+
+      echo -e "\Deactivating venv - ansible-env"
+      deactivate
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+# https://learn.microsoft.com/en-us/azure/devops/pipelines/release/azure-key-vault?view=azure-devops&tabs=managedidentity%2Cyaml
+- task: AzureKeyVault@2
+  inputs:
+    azureSubscription: myServiceConnection # string. Alias: ConnectedServiceName. Required. Azure subscription. 
+    KeyVaultName: myKeyVault # string. Required. Key vault. 
+    SecretsFilter: myPrivateKey # string. Required. Secrets filter. Default: *.
+    RunAsPreJob: false # boolean. Make secrets available to whole job. Default: false.
+
+- task: Bash@3
+  displayName: 'Save SSH key in a temp file'
+  env:
+   PRIVATE_KEY: "$(myPrivateKey)"
+  inputs:
+    targetType: 'inline'
+    script: |
+        echo "$PRIVATE_KEY" > /tmp/azure_vm_id_rsa
+        chmod 600 /tmp/azure_vm_id_rsa
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+
+# NOTE 1: this will override the key file path for all target hosts, if you want to be more specific you will need to alter the individual hostvars or predefine the paths.
+# NOTE 2: we disable host key checking here as the agent is running in a non-interactive mode
+- task: Bash@3
+  displayName: 'Execute Ansible Playbook to configure target VM'
+  env:
+    ANSIBLE_HOST_KEY_CHECKING: False
+  inputs:
+    targetType: 'inline'
+    script: |
+      set -e
+      source ansible-env/bin/activate
+      ansible-playbook -i myInventory.yml playbooks/myPlaybook.yml -e "ansible_ssh_private_key_file=/tmp/azure_vm_id_rsa"
+      deactivate
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+- task: Bash@3
+  displayName: 'Remove SSH key'
+  condition: always()
+  inputs:
+    targetType: 'inline'
+    script: |
+      rm -f /tmp/azure_vm_id_rsa
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
